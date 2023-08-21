@@ -1,4 +1,13 @@
-import Header  from "./Components/header";
+
+
+ import Header from './Components/header';
+ import Posts from './Components/Myposts'; // Import your MyPosts component
+ import AddPosts from './Components/Addposts';
+ import Favorites from './Components/Favourites';
+ import AllPosts from './Components/AllPosts';
+ import React from 'react';
+ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Updated import
+ import { UserProvider } from './Components/Firebase/UserContext';
 
 const BodyStyle = {
   width: '100%',
@@ -13,23 +22,34 @@ const BodyStyle = {
  };
 
 
-function App() {
-  return (
-    <div className="App">
-     
-     <div  style={BodyStyle}>
-    
-     <Header></Header>
+
  
-    
-     </div>
-     
-    
-     
+ function App() {
+
+
+
+   return (
+    <UserProvider>
+     <Router>
+       <div style={BodyStyle} className="App">
+         <Header></Header>
+ 
+         <Routes>
+          
+           <Route path="/favourites" element={<Favorites />} />
+           <Route path="/posts" element={<Posts />} />
+           <Route path="/addposts" element={<AddPosts />} />
+           <Route path="/allposts" element={<AllPosts />} />
+
+         </Routes>
+       </div>
+     </Router>
    
-
-    </div>
-  );
-}
-
-export default App;
+     </UserProvider>
+     
+   );
+ }
+ 
+ 
+ export default App;
+ 

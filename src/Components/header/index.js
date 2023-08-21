@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth } from './firebase'; 
 import { GoogleAuthProvider, signInWithPopup , signOut  } from 'firebase/auth'; // Import the necessary functions
-
+import { useUser } from '../Firebase/UserContext';
 
 const HeaderStyle = {
     height: '15vh',
@@ -64,7 +64,7 @@ const SearchContainerStyle = {
   
   const Header = () => {
     
-
+    
     
     const handleLogout = () => {
       signOut(auth)
@@ -76,18 +76,24 @@ const SearchContainerStyle = {
         });
     };
 
-  
-    const handleGoogleSignIn = () => {
+    const { setUserId } = useUser();
+
+    const HandleGoogleSignIn = () => {
+
+    
       const provider = new GoogleAuthProvider(); // Create a new GoogleAuthProvider
       signInWithPopup(auth, provider)
         .then((result) => {
           const user = result.user;
-          console.log('Logged in user:', user.displayName);
+          setUserId(user.uid); 
+          console.log('Logged in user:', user.displayName , user.uid);
         })
         .catch((error) => {
           console.error('Google sign-in error:', error);
         });
     };
+
+
     return (
       <div style={HeaderStyle}>
        
@@ -97,13 +103,18 @@ const SearchContainerStyle = {
             alt="Logo"
             style={LogoStyle}
           />
-        <div>
-          <a href="#" style={MenuLinkStyle}>Home</a>
-          <a href="#" style={MenuLinkStyle}>My Posts</a>
-          <a href="#" style={MenuLinkStyle}>Favorites</a>
-          <a onClick={handleGoogleSignIn} style={MenuLinkStyle}>Login</a>
+        
+          <div>
+          <a href="/" style={MenuLinkStyle}>Home</a>
+          <a href="/posts" style={MenuLinkStyle}>   My Profile </a>
+          <a href="/addposts" style={MenuLinkStyle}>   Add Posts </a>
+          <a href="/allposts" style={MenuLinkStyle}>   Posts </a>
+          <a href="/favourites" style={MenuLinkStyle}>Favorites</a>
+          <a onClick={HandleGoogleSignIn} style={MenuLinkStyle}>Login</a>
           <a  onClick={handleLogout} style={MenuLinkStyle}>Logout</a>
         </div>
+         
+       
         <div style={SearchContainerStyle}>
           <input type="text" placeholder="Search" style={SearchInputStyle} />
           <div style={ButtonStyle}>Search</div>
